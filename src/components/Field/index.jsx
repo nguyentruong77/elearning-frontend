@@ -19,7 +19,7 @@ export default function Field({
   ...props
 }) {
   return (
-    <label>
+    <label style={{ position: 'relative' }}>
       <p>
         {label}
         {required && <span>*</span>}

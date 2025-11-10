@@ -1,34 +1,33 @@
-import "./assets/css/tailwind.css";
 import { useRoutes } from "react-router-dom";
-import { courseService } from "./services/course";
-import { useEffect, useState } from "react";
 import { routers } from "./routers";
+//import './assets/css/tailwind.css'
+import './assets/css/custom.css'
 
 function App() {
-  let avt = courseService.getCourseDetail(5).thumbnailUrl;
-  const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch (err) {
-      return null;
-    }
-  });
-  const login = () => {
-    setUser({
-      name: "Nguyen Ich Truong",
-      avatar: avt,
-    });
-  };
+  //let avt = courseService.getCourseDetail(5).thumbnailUrl;
+  // const [user, setUser] = useState(() => {
+  //   try {
+  //     return JSON.parse(localStorage.getItem("user"));
+  //   } catch (err) {
+  //     return null;
+  //   }
+  // });
+  // const login = () => {
+  //   setUser({
+  //     name: "Nguyen Ich Truong",
+  //     avatar: avt,
+  //   });
+  // };
 
-  const logout = () => {
-    setUser();
-  };
+  // const logout = () => {
+  //   setUser();
+  // };
 
-  useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(user));
-  }, [user]);
+  // useEffect(() => {
+  //   localStorage.setItem("user", JSON.stringify(user));
+  // }, [user]);
 
-  const element = useRoutes(routers(user, login, logout));
+  const element = useRoutes(routers);
 
   return (
     <>

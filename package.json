@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.1.0",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@reduxjs/toolkit": "^2.9.2",
-    "axios": "^1.13.1",
+    "antd": "^5.28.0",
+    "axios": "^1.13.2",
     "classnames": "^2.5.1",
     "dom": "^0.0.3",
     "lodash": "^4.17.21",

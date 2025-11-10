@@ -17,9 +17,9 @@ import Page404 from "../pages/404";
 import { PATH } from "../config/path";
 import { profile } from "./profile";
 
-export const routers = (user, login, logout) => [
+export const routers = [
   {
-    element: <MainLayout user={user} login={login} logout={logout} />,
+    element: <MainLayout />,
     children: [
       { element: <Home />, index: true },
       { path: PATH.contact, element: <Contact /> },
@@ -38,15 +38,15 @@ export const routers = (user, login, logout) => [
       { path: PATH.coin, element: <Coin /> },
 
       {
-        element: <AuthRouter user={user} redirect={PATH.home} />,
+        element: <AuthRouter redirect={PATH.home} />,
         children: [
-          { path: PATH.signin, element: <SignIn login={login} user={user} /> },
-          { path: PATH.signup, element: <SignUp user={user} /> },
-          { path: PATH.resetPassword, element: <ResetPassword user={user} /> },
+          { path: PATH.signin, element: <SignIn /> },
+          { path: PATH.signup, element: <SignUp /> },
+          { path: PATH.resetPassword, element: <ResetPassword /> },
         ],
       },
 
-      profile(user),
+      profile(),
 
       { path: "*", element: <Page404 /> },
     ],

@@ -1,8 +1,11 @@
 import React from "react";
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 import { PATH } from "../config/path";
+import { useAuth } from "../components/AuthContext";
+import { avatarDefault } from "../../config/index";
 
-export default function ProfileLayout({ user }) {
+export default function ProfileLayout() {
+  const { user } = useAuth()
   if (!user) return <Navigate to={PATH.signin} />;
   return (
     <main className="profile" id="main">
@@ -10,7 +13,7 @@ export default function ProfileLayout({ user }) {
         <div className="top-info">
           <div className="avatar">
             {/* <span class="text">H</span> */}
-            <img src="/img/avt.png" alt="" />
+            <img src={avatarDefault} alt="" />
             <div className="camera" />
           </div>
           <div className="name">Truong Nguyen</div>

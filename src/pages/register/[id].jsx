@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { regexp, required } from "../../utils/validate";
 import Field from "../../components/Field";
 import { useForm } from "../../hooks/useForm";
-import { courseService } from "../../services/course";
+import { courseService } from "../../services/course.service";
 import { useScrollTop } from "../../hooks/useScrollTop";
 import { useParams } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch";
 
 export default function RegisterPage() {
   useScrollTop();
   const { id } = useParams();
-  const [detail, setDetail] = useState(() => {
-    return courseService.getCourseDetail(parseInt(id));
-  });
+
+  const { data, loading } = useFetch(() => courseService.getCourseDetail(id))
+
   const [isSuccess, setIsSuccess] = useState(false);
   const { validate, register, values } = useForm({
     name: [required()],
@@ -30,6 +31,11 @@ export default function RegisterPage() {
     if (validate()) setIsSuccess(true);
     else setIsSuccess(false);
   };
+
+  if (loading) return null
+  let { data: detail } = data
+
+  if (!detail) return <div style={{ margin: '100px 0' }}>...Not Found...</div>
 
   return (
     <main id="main">

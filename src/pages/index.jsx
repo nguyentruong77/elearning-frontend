@@ -1,9 +1,13 @@
-import React from "react";
 import { useScrollTop } from "../hooks/useScrollTop";
-import ListCourse from "../components/ListCourse";
+import { courseService } from "../services/course.service";
+import CourseCard, { CourseCardLoading } from "../components/CourseCard";
+import { PATH } from "../config/path";
+import { Link } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 
 export default function Home() {
-  useScrollTop();
+  const { data: courses, loading } = useFetch(() => courseService.getCourse('?limit=6'))
+  useScrollTop()
   return (
     <main className="homepage" id="main">
       <div className="banner jarallax">
@@ -11,20 +15,42 @@ export default function Home() {
           <div className="content">
             <h2 className="title">Kiến thức</h2>
             <h2 className="title">mở ra trang mới cuộc đời bạn</h2>
-            <a href="/course-list.html" className="btn main round">
+            <Link to={PATH.course} className="btn main round">
               KHÓA HỌC
-            </a>
+            </Link>
           </div>
         </div>
         <div className="jarallax-img">
-          <img data-src="img/bg-cover.jpg" alt="" className="lazyload" />
+          {/* className="lazyload" */}
+          <img src="/img/bg-cover.jpg" alt="" />
           <div
             className="video-bg lazyload"
-            data-src="video/Spacedev-video-bg2.mp4"
+            data-src="/video/Spacedev-video-bg2.mp4"
           />
         </div>
       </div>
-      <ListCourse />
+      <section className="section-1">
+        <div className="container">
+          <h2 className="main-title">KHÓA HỌC SPACEDEV</h2>
+          <p className="top-des">
+            Cho dù bạn muốn tìm kiếm công việc, khởi nghiệp, phát triển hoạt
+            động kinh doanh hay chỉ đơn giản là muốn khám phá thế giới, hãy chọn
+            lộ trình học tập mà bạn muốn và bắt đầu câu chuyện thành công của
+            bạn.
+          </p>
+          <div className="textbox" style={{ marginTop: "100px" }}>
+            <h3 className="sub-title">KHÓA HỌC</h3>
+            <h2 className="main-title">OFFLINE</h2>
+          </div>
+          <div className="list row">
+            {loading
+              ? Array.from(Array(6)).map((_, i) => (
+                <CourseCardLoading key={i} />
+              ))
+              : courses.data.map((e) => <CourseCard key={e.key} {...e} />)}
+          </div>
+        </div>
+      </section>
       <section className="section-different">
         <div className="container">
           <div className="row">
@@ -34,9 +60,9 @@ export default function Home() {
                 <span>đặc biệt</span> tại Spacedev
               </h2>
               <div className="videodif" data-src="video/cfd-video-intro.mp4">
-                <img src="./img/img-cfd-dac-biet.jpg" alt="" />
+                <img src="/img/img-cfd-dac-biet.jpg" alt="" />
                 <div className="play-btn btn-video-intro">
-                  <img src="img/play-icon.svg" alt="" />
+                  <img src="/img/play-icon.svg" alt="" />
                 </div>
               </div>
             </div>
@@ -88,7 +114,7 @@ export default function Home() {
 
                     <div class="video-src" data-src="video/Spacedev-video-intro.mp4"></div>
                     <div class="play-btn btn-video-intro">
-                        <img src="img/play-video-btn.png" alt="">
+                        <img src="/img/play-video-btn.png" alt="">
                     </div>
                 </div>
             </div>
@@ -109,7 +135,7 @@ export default function Home() {
                         <p>Thành viên Spacedev 1</p>
                       </div>
                       <div className="quotes">
-                        <img src="img/quotes.svg" alt="" />
+                        <img src="/img/quotes.svg" alt="" />
                       </div>
                     </div>
                     <div className="content">
@@ -119,7 +145,7 @@ export default function Home() {
                     </div>
                     <div className="bottom">
                       <a href="#" target="_blank">
-                        <img src="img/facebook.svg" alt="" />
+                        <img src="/img/facebook.svg" alt="" />
                       </a>
                       <span>09/10/2020</span>
                     </div>
@@ -131,7 +157,7 @@ export default function Home() {
                         <p>Thành viên Spacedev 2</p>
                       </div>
                       <div className="quotes">
-                        <img src="img/quotes.svg" alt="" />
+                        <img src="/img/quotes.svg" alt="" />
                       </div>
                     </div>
                     <div className="content">
@@ -142,7 +168,7 @@ export default function Home() {
                     </div>
                     <div className="bottom">
                       <a href="#" target="_blank">
-                        <img src="img/facebook.svg" alt="" />
+                        <img src="/img/facebook.svg" alt="" />
                       </a>
                       <span>01/10/2020</span>
                     </div>
@@ -154,7 +180,7 @@ export default function Home() {
                         <p>Thành viên Spacedev 3</p>
                       </div>
                       <div className="quotes">
-                        <img src="img/quotes.svg" alt="" />
+                        <img src="/img/quotes.svg" alt="" />
                       </div>
                     </div>
                     <div className="content">
@@ -165,7 +191,7 @@ export default function Home() {
                     </div>
                     <div className="bottom">
                       <a href="#" target="_blank">
-                        <img src="img/facebook.svg" alt="" />
+                        <img src="/img/facebook.svg" alt="" />
                       </a>
                       <span>01/10/2020</span>
                     </div>
@@ -178,7 +204,7 @@ export default function Home() {
                         <picture>
                           <source
                             media="(max-width: 767px)"
-                            srcSet="img/Intersect.png"
+                            srcSet="/img/Intersect.png"
                           />
                           <img data-flickity-lazyload="img/tes.jpg" alt="" />
                         </picture>
@@ -190,7 +216,7 @@ export default function Home() {
                             <p>Thành viên Spacedev1</p>
                           </div>
                           <div className="quotes">
-                            <img src="img/quotes.svg" alt="" />
+                            <img src="/img/quotes.svg" alt="" />
                           </div>
                         </div>
                         <div className="content">
@@ -199,7 +225,7 @@ export default function Home() {
                         </div>
                         <div className="bottom">
                           <a href="#" target="_blank">
-                            <img src="img/facebook.svg" alt="" />
+                            <img src="/img/facebook.svg" alt="" />
                           </a>
                           <span>09/10/2020</span>
                         </div>
@@ -210,7 +236,7 @@ export default function Home() {
                         <picture>
                           <source
                             media="(max-width: 767px)"
-                            srcSet="img/Intersect.png"
+                            srcSet="/img/Intersect.png"
                           />
                           <img data-flickity-lazyload="img/tes.jpg" alt="" />
                         </picture>
@@ -222,7 +248,7 @@ export default function Home() {
                             <p>Thành viên Spacedev1</p>
                           </div>
                           <div className="quotes">
-                            <img src="img/quotes.svg" alt="" />
+                            <img src="/img/quotes.svg" alt="" />
                           </div>
                         </div>
                         <div className="content">
@@ -231,7 +257,7 @@ export default function Home() {
                         </div>
                         <div className="bottom">
                           <a href="#" target="_blank">
-                            <img src="img/facebook.svg" alt="" />
+                            <img src="/img/facebook.svg" alt="" />
                           </a>
                           <span>09/10/2020</span>
                         </div>
@@ -242,7 +268,7 @@ export default function Home() {
                         <picture>
                           <source
                             media="(max-width: 767px)"
-                            srcSet="img/Intersect.png"
+                            srcSet="/img/Intersect.png"
                           />
                           <img data-flickity-lazyload="img/tes.jpg" alt="" />
                         </picture>
@@ -254,7 +280,7 @@ export default function Home() {
                             <p>Thành viên Spacedev1</p>
                           </div>
                           <div className="quotes">
-                            <img src="img/quotes.svg" alt="" />
+                            <img src="/img/quotes.svg" alt="" />
                           </div>
                         </div>
                         <div className="content">
@@ -263,7 +289,7 @@ export default function Home() {
                         </div>
                         <div className="bottom">
                           <a href="#" target="_blank">
-                            <img src="img/facebook.svg" alt="" />
+                            <img src="/img/facebook.svg" alt="" />
                           </a>
                           <span>09/10/2020</span>
                         </div>
@@ -284,19 +310,19 @@ export default function Home() {
           <h2 className="main-title">Hình ảnh hoạt động</h2>
         </div>
         <div className="list">
-          <img data-flickity-lazyload="./img/img_team1.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team2.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team3.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team4.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team3.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team4.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team1.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team2.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team3.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team4.png" alt="" />
-          <img data-flickity-lazyload="./img/img_team3.png" alt="" />
+          <img data-flickity-lazyload="/img/img_team1.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team2.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team3.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team4.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team3.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team4.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team1.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team2.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team3.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team4.png" alt="Loading..." />
+          <img data-flickity-lazyload="/img/img_team3.png" alt="Loading..." />
           <div className="item carousel-cell">
-            <img data-flickity-lazyload="./img/img_team4.png" alt="" />
+            <img data-flickity-lazyload="/img/img_team4.png" alt="Loading..." />
           </div>
         </div>
         <div className="controls">

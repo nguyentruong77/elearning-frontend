@@ -1,3 +1,5 @@
+import { api, COURSE_API } from "../config/api";
+
 const courses = [
   {
     id: 17,
@@ -145,10 +147,16 @@ const courses = [
   },
 ];
 export const courseService = {
-  getCourse() {
+  getCourse(query = "") {
+    return api.get(`${COURSE_API}/courses${query}`);
+  },
+  getCourseTemp() {
     return courses;
   },
   getCourseDetail(id) {
-    return courses.find((e) => e.id === id);
+    return api.get(`${COURSE_API}/courses/${id}`);
+  },
+  getRelative(id) {
+    return api.get(`${COURSE_API}/courses/related/${id}`);
   },
 };

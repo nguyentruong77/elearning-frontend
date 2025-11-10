@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { courseService } from "../../services/course";
+import { courseService } from "../../services/course.service";
 import CourseCard from "../CourseCard";
 
 export default function ListCourse() {
   const [courses, setCourses] = useState(() => {
-    return courseService.getCourse();
+    return courseService.getCourseTemp();
   });
   return (
     <section className="section-1">

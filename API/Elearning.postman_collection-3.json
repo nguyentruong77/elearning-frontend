@@ -1,0 +1,598 @@
+{
+	"info": {
+		"_postman_id": "35366624-59dd-4839-97d4-d54386d126a7",
+		"name": "Spacedev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2272838"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody).data\r",
+									"if(jsonData) {\r",
+									"    postman.setEnvironmentVariable('accessToken', jsonData.accessToken)\r",
+									"    postman.setEnvironmentVariable('refreshToken', jsonData.refreshToken)\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dangthuyenvuong@gmail.com\",\r\n    \"password\": \"dangthuyenvuong\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/authentication/v2/login",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"authentication",
+								"v2",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody).data",
+									"if(jsonData) {",
+									"    postman.setEnvironmentVariable('accessToken', jsonData.accessToken)",
+									"    postman.setEnvironmentVariable('refreshToken', jsonData.refreshToken)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/authentication/v2/refresh-token",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"authentication",
+								"v2",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Address",
+					"item": []
+				},
+				{
+					"name": "Get Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/users",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"0949816596\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dangthuyenvuong@gmail.com\",\r\n    \"password\": \"dangthuyenvuong\",\r\n    \"name\": \"Đặng Thuyền Vương\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/register",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend email register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dangthuyenvuong@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/resend-email",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"resend-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dangthuyenvuong@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/reset-password",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password by code",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"123456789\",\r\n    \"code\": \"a125241c92c48db9bf80904b0af583ba64448c1d57f29873d7c84358fc11dfb6fa4add441883d82f94e2e60fc20bf48a085e089513a4b6dfc3a0fdfe120bd5531\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/change-password-by-code",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"change-password-by-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"987654321\",\r\n    \"newPassword\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/change-password",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dangthuyenvuong@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/delete/user",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": []
+		},
+		{
+			"name": "Chat",
+			"item": []
+		},
+		{
+			"name": "Order",
+			"item": []
+		},
+		{
+			"name": "Cart",
+			"item": []
+		},
+		{
+			"name": "File",
+			"item": []
+		},
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "Course",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses/my-course",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses",
+								"my-course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Course Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses/17",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Course Related",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses/related/17",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses",
+								"related",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Đặng Thuyền Vương\",\r\n    \"phone\": \"0949816596\",\r\n    \"email\": \"dangthuyenvuong@gmail.com\",\r\n    \"fb\": \"https://facebook.com/adfasdf\",\r\n    \"payment\": \"chuyen-khoan\",\r\n    \"note\": \"Em đã có kiến thức js cơ bản\",\r\n    \"coin\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses/register/17",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses",
+								"register",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Đặng Thuyền Vương\",\r\n    \"phone\": \"0949816596\",\r\n    \"email\": \"dangthuyenvuong@gmail.com\",\r\n    \"fb\": \"https://facebook.com/adfasdf\",\r\n    \"payment\": \"chuyen-khoan\",\r\n    \"note\": \"Em đã có kiến thức js cơ bản\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/elearning/v4/courses/cancel/17",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"elearning",
+								"v4",
+								"courses",
+								"cancel",
+								"17"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "Contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Dang Thuyen Vuong\",\r\n    \"email\": \"dangthuyenvuong@gmail.com\",\r\n    \"phone\": \"0949816596\",\r\n    \"website\": \"facebook.com\",\r\n    \"title\": \"Contact title\",\r\n    \"content\": \"Contact content\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/organization/contact",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"organization",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Wishlist",
+					"item": []
+				}
+			]
+		}
+	]
+}

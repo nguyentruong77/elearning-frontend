@@ -1,40 +1,36 @@
-import React from "react";
 import { PATH } from "../config/path";
 import { useForm } from "../hooks/useForm";
-import { required } from "../utils/validate";
-import Field from "../components/Field";
-import { useNavigate } from "react-router-dom";
+import { regexp, required } from "../utils/validate";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { useAsync } from "../hooks/useAsync";
 
-export default function SignIn({ login }) {
+export default function SignIn() {
+  const { login } = useAuth()
+  const { loading, excute: loginService } = useAsync(login)
   const navigate = useNavigate();
-  const { values, register, validate } = useForm({
-    username: [required()],
+  const form = useForm({
+    username: [required(), regexp('email')],
     password: [required()],
   });
-  const onSubmit = (ev) => {
-    ev.preventDefault();
-    console.log(validate());
-    if (validate()) {
-      login();
-      navigate(PATH.home);
+  const _onLogin = () => {
+    if (form.validate()) {
+      loginService(form.values)
     }
+    // login();
+    // navigate(PATH.home);
   };
 
   return (
     <main className="auth" id="main">
       <div className="wrap">
         {/* login-form */}
-        <form onSubmit={onSubmit} className="ct_login">
+        <div className="ct_login">
           <h2 className="title">Đăng nhập</h2>
-          <Field
-            placeholder="Email / Số điện thoại"
-            {...register("username")}
-          ></Field>
-          <Field
-            placeholder="Mật khẩu"
-            type={"password"}
-            {...register("password")}
-          ></Field>
+          <Input {...form.register('username')} className="mb-5" placeholder="Email / Số điện thoại" />
+          <Input {...form.register('password')} className="mb-5" placeholder="Mật khẩu" type='password' />
           <div className="remember">
             <label className="btn-remember">
               <div>
@@ -46,14 +42,14 @@ export default function SignIn({ login }) {
               Quên mật khẩu?
             </a>
           </div>
-          <button className="btn rect main btn-login">đăng nhập</button>
+          <Button loading={loading} onClick={_onLogin} className="btn rect main btn-login">đăng nhập</Button>
           <div className="text-register" style={{}}>
             <span>Nếu bạn chưa có tài khoản?</span>{" "}
-            <a className="link" href="#">
+            <Link className="link" to={PATH.signup}>
               Đăng ký
-            </a>
+            </Link>
           </div>
-        </form>
+        </div>
       </div>
     </main>
   );

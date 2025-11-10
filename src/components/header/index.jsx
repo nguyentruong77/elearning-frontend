@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { PATH } from "../../config/path";
+import { useAuth } from "../AuthContext";
+import { avatarDefault } from "../../config/index";
 
-export default function Header({ user, logout }) {
+export default function Header() {
   const { pathname } = useLocation();
+  const { user, logout } = useAuth()
   useEffect(() => {
     onCloseMenu();
   }, [pathname]);
@@ -39,7 +42,7 @@ export default function Header({ user, logout }) {
                   <a href="./profile.html" className="info">
                     <div className="name">{user.name}</div>
                     <div className="avatar">
-                      <img src={user.avatar} alt="" />
+                      <img src={user.avatar ?? avatarDefault} alt="" />
                     </div>
                   </a>
                 </div>
@@ -74,7 +77,7 @@ export default function Header({ user, logout }) {
           <li>
             <a href={PATH.profile.index} className="account">
               <div className="avatar">
-                <img src="/img/avt.png" alt="" />
+                <img src={avatarDefault} alt="" />
               </div>
               <div className="name">Nguyen Ich Truong</div>
             </a>
