@@ -1,39 +1,49 @@
+import { useAuth } from "@/components/AuthContext";
+import { useAsync } from "@/hooks/useAsync";
+import { useForm } from "@/hooks/useForm";
+import { userService } from "@/services/user.service";
+import { handleError } from "@/utils/handleError";
+import { regexp, required, validate } from "@/utils/validate";
+import { message } from "antd";
 import React from "react";
 
 export default function MyProfile() {
+  const { user, setUser } = useAuth()
+  const { loading, excute: updateInfoService } = useAsync(userService.updateInfo)
+  const { register, values } = useForm({
+    name: [
+      required(),
+    ],
+    phone: [
+      required(),
+      regexp('phone')
+    ],
+    fb: [
+      required(),
+      regexp('url')
+    ]
+  }, user)
+
+  const onSubmit = async () => {
+    try {
+      if (validate()) {
+        const res = await updateInfoService(values)
+        setUser(res.data)
+        message.success('Bạn đã cập nhật thông tin tài khoản thành công')
+      }
+
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   return (
-    <div className="tab1" style={{ display: "block" }}>
-      <label>
-        <p>
-          Họ và tên<span>*</span>
-        </p>
-        <input type="text" placeholder="Nguyễn Văn A" />
-      </label>
-      <label>
-        <p>
-          Số điện thoại<span>*</span>
-        </p>
-        <input type="text" placeholder="0949******" />
-      </label>
-      <label>
-        <p>
-          Email<span>*</span>
-        </p>
-        <input defaultValue="vuong.dang@dna.vn" disabled type="text" />
-      </label>
-      <label>
-        <p>
-          Facebook<span>*</span>
-        </p>
-        <input type="text" placeholder="Facebook url" />
-      </label>
-      <label>
-        <p>
-          Skype<span>*</span>
-        </p>
-        <input type="text" placeholder="Skype url" />
-      </label>
-      <div className="btn main rect">LƯU LẠI</div>
+    <div className="tab1">
+      <Field {...register('name')} placeholder="Nguyễn Văn A" label="Họ và tên" required />
+      <Field {...register('phone')} placeholder="0949******" label="Số điện thoại" required />
+      <Field {...register('username')} disabled />
+      <Field {...register('fb')} placeholder="Facebook url" label="Facebook" required />
+      <Button loading={loading} onSubmit={onSubmit}>LƯU LẠI</Button>
     </div>
   );
 }

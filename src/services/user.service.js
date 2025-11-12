@@ -10,4 +10,7 @@ export const userService = {
   getProfile() {
     return api.get(`${USER_API}`);
   },
+  updateInfo(data) {
+    return api.patch(`${USER_API}`, data);
+  },
 };

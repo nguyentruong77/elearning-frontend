@@ -13,6 +13,9 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate()
     const [user, _setUser] = useState(getUser)
+    useEffect(() => {
+        setUser(user || null)
+    }, [user])
     const login = async (data) => {
         try {
             const res = await authService.login(data)
@@ -37,5 +40,5 @@ export const AuthProvider = ({ children }) => {
         message.success('Đăng xuất tài khoản thành công')
     }
 
-    return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{ user, login, logout, setUser: _setUser }}>{children}</AuthContext.Provider>
 }
