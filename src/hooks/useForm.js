@@ -9,7 +9,19 @@ export const useForm = (rules, initialValue = {}) => {
     return {
       error: errors[name],
       value: values[name] || "",
-      onChange: (ev) => setValues({ ...values, [name]: ev.target.value }),
+      onChange: (ev) => {
+        let _values = { ...values, [name]: ev.target.value };
+        if (rules[name]) {
+          const error = validate(
+            {
+              [name]: rules[name],
+            },
+            _values
+          );
+          setError({ ...errors, [name]: error[name] });
+        }
+        setValues(_values);
+      },
     };
   };
   const _validate = () => {

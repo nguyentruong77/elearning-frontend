@@ -6,10 +6,15 @@ import { useFetch } from "../../hooks/useFetch";
 import CourseCard from "../../components/CourseCard";
 import Skeleton from "../../components/Skeleton";
 import Accordion from "../../components/Accordion";
+import moment from "moment";
+import { useState } from "react";
+import Teacher from "@/components/Teacher";
+import { Modal } from "@/components/Modal";
 
 export default function CourseDetail() {
   const { id } = useParams();
   useScrollTop([id]);
+  const [isOpenVideoModal, setIsOpenVideoModal] = useState(false)
   const { data, loading } = useFetch(() => courseService.getCourseDetail(id), [id])
   const { data: related } = useFetch(() => courseService.getRelative(id), [id])
   const detail = data?.data
@@ -40,6 +45,7 @@ export default function CourseDetail() {
   }
 
   const pathCourse = generatePath(PATH.courseRegister, { id });
+  const startTime = moment(detail.opening_time).format('DD/MM/YYYY')
   return (
     <main className="course-detail" id="main">
       <section className="banner style2" style={{ "--background": "#cde6fb" }}>
@@ -48,10 +54,10 @@ export default function CourseDetail() {
             <h1>{detail.title}</h1>
             <div className="row">
               <div className="date">
-                <strong>Khai giảng:</strong> 12/10/2020
+                <strong>Khai giảng:</strong> {startTime}
               </div>
               <div className="time">
-                <strong>Thời lượng:</strong> 18 buổi
+                <strong>Thời lượng:</strong> {detail.count_video} buổi
               </div>
             </div>
             <a
@@ -65,10 +71,13 @@ export default function CourseDetail() {
         </div>
         <div className="bottom">
           <div className="container">
-            <div className="video">
+            <div className="video" onClick={() => setIsOpenVideoModal(true)}>
               <div className="icon">
                 <img src="/img/play-icon-white.png" alt="" />
               </div>{" "}
+              <Modal maskeCloseable visibile={isOpenVideoModal} onCancel={() => setIsOpenVideoModal(false)}>
+                <iframe width="800px" height="450px" src="https://www.youtube.com/embed/OyRmce1F7-8?si=nh9RafnzGvuE27oH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </Modal>
               <span>giới thiệu</span>
             </div>
             <div className="money">{detail.money.toLocaleString("vi-VN")}</div>
@@ -90,26 +99,15 @@ export default function CourseDetail() {
           </Accordion.Group>
           <h3 className="title">yêu cầu cần có</h3>
           <div className="row row-check">
-            <div className="col-md-6">Đã từng học qua HTML, CSS</div>
-            <div className="col-md-6">
-              Cài đặt phần mềm Photoshop, Adobe illustrator, Skype
-            </div>
+            {
+              detail.required.map((e, i) => <div key={i} className="col-md-6">{e.content}</div>)
+            }
           </div>
           <h3 className="title">hình thức học</h3>
           <div className="row row-check">
-            <div className="col-md-6">
-              Học offline tại văn phòng, cùng Truong Nguyen và 3 đồng nghiệp.
-            </div>
-            <div className="col-md-6">
-              Dạy và thực hành thêm bài tập online thông qua Skype.
-            </div>
-            <div className="col-md-6">
-              Được các mentor và các bạn trong team Spacedev hổ trợ thông qua
-              group Spacedev Facebook hoặc phần mềm điều khiển máy tính.
-            </div>
-            <div className="col-md-6">
-              Thực hành 2 dự án thực tế với sự hướng dẫn của Spacedev Team.
-            </div>
+            {
+              detail.benefits.map((e, i) => <div key={i} className="col-md-6">{e.content}</div>)
+            }
           </div>
           <h3 className="title">
             <div className="date-start">lịch học</div>
@@ -119,42 +117,28 @@ export default function CourseDetail() {
             </div>
           </h3>
           <p>
-            <strong>Ngày bắt đầu: </strong> 09/09/2020 <br />
-            <strong>Thời gian học: </strong> Thứ 3 từ 18h45-21h45, Thứ 7 từ
-            12h-15h, Chủ nhật từ 15h-18h
+            <strong>Ngày bắt đầu: </strong> {startTime} <br />
+            <strong>Thời gian học: </strong> {detail.schedule}
           </p>
           <h3 className="title">Người dạy</h3>
           <div className="teaches">
-            <div className="teacher">
-              <div className="avatar">
-                <img src="/img/avt.png" alt="" />
-              </div>
-              <div className="info">
-                <div className="name">Nguyen Ich Truong</div>
-                <div className="title">
-                  Founder Spacedev &amp; Fullstack developer
-                </div>
-                <p className="intro">
-                  My education, career, and even personal life have been molded
-                  by one simple principle; well designed information resonates
-                  with people and can change lives.I have a passion for making
-                  information resonate. It all starts with how people think.
-                  With how humans work. As humans we have learned how to read
-                  and write and while that is incredible, we are also already
-                  hard-wired to do some things a bit more "automatically"
-                </p>
-                <p>
-                  <strong>Website:</strong>{" "}
-                  <a href="#">https://dangthuyenvuong.github.io/</a>
-                </p>
-              </div>
-            </div>
+            <Teacher {...detail.teacher} />
           </div>
+          {
+            detail.mentor.length > 0 && <>
+              <h3 className="title">Người hướng dẫn</h3>
+              <div className="teaches">
+                {
+                  detail.mentor.map((e) => <Teacher key={e.id} {...e} />)
+                }
+              </div>
+            </>
+          }
           <div className="bottom">
             <div className="user">
-              <img src="/img/user-group-icon.png" alt="" /> 12 bạn đã đăng ký
+              <img src="/img/user-group-icon.png" alt="" /> {detail.number_student_default} bạn đã đăng ký
             </div>
-            <div className="btn main btn-register round">đăng ký</div>
+            <a className="btn main btn-register round" href={pathCourse}>đăng ký</a>
             <div className="btn-share btn overlay round btn-icon">
               <img src="/img/facebook.svg" alt="" />
             </div>

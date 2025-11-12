@@ -4,7 +4,6 @@ import CourseCard, { CourseCardLoading } from "../components/CourseCard";
 import { PATH } from "../config/path";
 import { Link } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import VideoModal from "../components/VideoModal";
 import { useState } from "react";
 import { Modal } from "../components/Modal";
 import Testimonial from "../components/Testimonial";
@@ -13,6 +12,7 @@ import TeamGallery from "../components/TeamGallery";
 export default function Home() {
   const [isOpenVideoModal, setIsOpenVideoModal] = useState(false)
   const { data: courses, loading } = useFetch(() => courseService.getCourse('?limit=6'))
+  console.log(courses)
   useScrollTop()
   return (
     <main className="homepage" id="main">

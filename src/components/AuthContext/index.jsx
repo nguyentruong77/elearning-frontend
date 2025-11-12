@@ -3,7 +3,7 @@ import { authService } from "../../services/auth.service";
 import { message } from "antd";
 import { clearToken, clearUser, getUser, setToken, setUser } from "../../utils/token";
 import { userService } from "../../services/user.service";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../config/path";
 
 const AuthContext = createContext({})
@@ -12,6 +12,7 @@ export const useAuth = () => useContext(AuthContext)
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate()
+    const { state } = useLocation()
     const [user, _setUser] = useState(getUser)
     useEffect(() => {
         setUser(user || null)
@@ -33,7 +34,12 @@ export const AuthProvider = ({ children }) => {
         _setUser(user.data)
         setUser(user.data)
         message.success('Đăng nhập tài khoản thành công!')
-        navigate(PATH.profile.index)
+        if (state?.redirect) {
+            navigate(state.redirect)
+        }
+        else {
+            navigate(PATH.profile.index)
+        }
     }
     const logout = () => {
         _setUser(null)

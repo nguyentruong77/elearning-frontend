@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { regexp, required } from "../../utils/validate";
 import Field from "../../components/Field";
 import { useForm } from "../../hooks/useForm";
 import { courseService } from "../../services/course.service";
 import { useScrollTop } from "../../hooks/useScrollTop";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
+import { Select } from "@/components/Select";
+import { Checkbox } from "@/components/Checkbox";
+import { useAuth } from "@/components/AuthContext";
+import { PATH } from "@/config/path";
+import { message } from "antd";
+import { useAsync } from "@/hooks/useAsync";
+import { handleError } from "@/utils/handleError";
+import Button from "@/components/Button";
 
 export default function RegisterPage() {
   useScrollTop();
   const { id } = useParams();
-
+  const pathName = useLocation()
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!user) {
+      message.warning("Vui lòng đăng nhập trước khi đăng ký khóa học")
+      navigate(PATH.signin, { state: { redirect: pathName } })
+    }
+  }, [user])
   const { data, loading } = useFetch(() => courseService.getCourseDetail(id))
-
+  const { excute: courseRegisterService, registerLoading } = useAsync(courseService.register)
   const [isSuccess, setIsSuccess] = useState(false);
   const { validate, register, values } = useForm({
     name: [required()],
@@ -24,11 +40,27 @@ export default function RegisterPage() {
         "Please enter a valid Facebook URL!"
       ),
     ],
+    payment: [
+      required()
+    ],
     note: [required()],
+  }, {
+    email: user.username,
+    name: user.name,
+    fb: user.fb,
+    phone: user.phone
   });
 
-  const onSubmit = () => {
-    if (validate()) setIsSuccess(true);
+  const onSubmit = async () => {
+    if (validate()) {
+      try {
+        const res = await courseRegisterService(id, values)
+        message.success(res?.message)
+        navigate(PATH.profile.course)
+      } catch (error) {
+        handleError(error)
+      }
+    }
     else setIsSuccess(false);
   };
 
@@ -41,7 +73,7 @@ export default function RegisterPage() {
     <main id="main">
       <section className="register-course">
         {isSuccess ? (
-          <div class="register-success">
+          <div class="register-success flex flex-col items-center gap-10 text-center max-w-2xl" style={{ margin: '40px auto' }}>
             <div class="contain">
               <div class="main-title">đăng ký thành công</div>
               <p>
@@ -55,9 +87,9 @@ export default function RegisterPage() {
                 số điện thoại của bạn.
               </p>
             </div>
-            <a href="/" class="btn main rect">
-              về trang chủ
-            </a>
+            <Link to={PATH.profile.course} class="btn main rect">
+              về khóa học của tôi
+            </Link>
           </div>
         ) : (
           <div className="container">
@@ -104,26 +136,22 @@ export default function RegisterPage() {
                   label="Sử dụng COIN"
                   {...register("coin")}
                   renderInput={(props) => (
-                    <div className="checkcontainer">
+                    <Checkbox {...props}>
                       Hiện có <strong>300 COIN</strong>
-                      {/* Giảm giá còn <span><strong>5.800.000 VND</strong>, còn lại 100 COIN</span> */}
-                      {/* Cần ít nhất 200 COIN để giảm giá */}
-                      <input type="checkbox" defaultChecked="checked" />
-                      <span className="checkmark" />
-                    </div>
+                    </Checkbox>
                   )}
                 />
                 <Field
                   label="Hình thức thanh toán"
                   {...register("payment")}
                   renderInput={(props) => (
-                    <div className="select">
-                      <div className="head">Chuyển khoản</div>
-                      <div className="sub">
-                        <a href="#">Chuyển khoản</a>
-                        <a href="#">Thanh toán tiền mặt</a>
-                      </div>
-                    </div>
+                    <Select
+                      {...props}
+                      placholder="Hình thức thanh toán"
+                      options={[
+                        { value: 'chuyen-khoan', label: 'Chuyển khoản' },
+                        { value: 'thanh-toan-tien-mat', label: 'Thanh toán tiền mặt' },
+                      ]} />
                   )}
                 />
                 <Field
@@ -131,9 +159,9 @@ export default function RegisterPage() {
                   placeholder="Mong muốn cá nhân và lịch bạn có thể học."
                   {...register("note")}
                 />
-                <button onClick={onSubmit} className="btn main rect">
+                <Button loading={registerLoading} onClick={onSubmit}>
                   đăng ký
-                </button>
+                </Button>
               </div>
             </div>
           </div>

@@ -21,7 +21,6 @@ export default function SignIn() {
       try {
         const res = await loginService(form.values)
         console.log(res)
-        message.success('Đăng nhập thành công.')
         navigate(PATH.home);
       } catch (err) {
         console.error(err)
@@ -39,7 +38,7 @@ export default function SignIn() {
         <div className="ct_login">
           <h2 className="title">Đăng nhập</h2>
           <Input {...form.register('username')} className="mb-5" placeholder="Email / Số điện thoại" />
-          <Input {...form.register('password')} type="password" className="mb-5" placeholder="Mật khẩu" type='password' />
+          <Input {...form.register('password')} type="password" className="mb-5" placeholder="Mật khẩu" />
           <div className="remember">
             <label className="btn-remember">
               <div>

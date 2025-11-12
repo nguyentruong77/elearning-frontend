@@ -6,15 +6,12 @@ export const useFetch = (promise, dependencyList = []) => {
   const [status, setStatus] = useState("idle");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, dependencyList);
-
   const fetchData = async () => {
     try {
       setLoading(true);
       setStatus("pending");
       const res = await promise();
+      console.log(res);
       setData(res);
       setStatus("success");
     } catch (err) {
@@ -24,6 +21,10 @@ export const useFetch = (promise, dependencyList = []) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, dependencyList);
 
   return {
     loading,
