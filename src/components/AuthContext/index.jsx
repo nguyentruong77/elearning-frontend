@@ -26,9 +26,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error(error)
-            if (error?.response?.data.message) {
-                message.error(error?.response?.data.message)
-            }
+            throw error;
         }
     }
 

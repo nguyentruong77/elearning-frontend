@@ -6,6 +6,7 @@ import { useAuth } from "../components/AuthContext";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useAsync } from "../hooks/useAsync";
+import { message } from "antd";
 
 export default function SignIn() {
   const { login } = useAuth()
@@ -15,12 +16,20 @@ export default function SignIn() {
     username: [required(), regexp('email')],
     password: [required()],
   });
-  const _onLogin = () => {
+  const _onLogin = async () => {
     if (form.validate()) {
-      loginService(form.values)
+      try {
+        const res = await loginService(form.values)
+        console.log(res)
+        message.success('Đăng nhập thành công.')
+        navigate(PATH.home);
+      } catch (err) {
+        console.error(err)
+        if (err?.response?.data?.message) {
+          message.error(err?.response?.data?.message)
+        }
+      }
     }
-    // login();
-    // navigate(PATH.home);
   };
 
   return (
@@ -30,7 +39,7 @@ export default function SignIn() {
         <div className="ct_login">
           <h2 className="title">Đăng nhập</h2>
           <Input {...form.register('username')} className="mb-5" placeholder="Email / Số điện thoại" />
-          <Input {...form.register('password')} className="mb-5" placeholder="Mật khẩu" type='password' />
+          <Input {...form.register('password')} type="password" className="mb-5" placeholder="Mật khẩu" type='password' />
           <div className="remember">
             <label className="btn-remember">
               <div>
