@@ -3,6 +3,6 @@ import { useAuth } from "../AuthContext";
 
 export default function AuthRouter({ redirect = "/" }) {
   const { user } = useAuth()
-  if (user) return <Navigate to={redirect} />;
+  if (!user) return <Navigate to={redirect} />;
   return <Outlet />;
 }

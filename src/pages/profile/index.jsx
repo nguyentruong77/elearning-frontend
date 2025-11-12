@@ -1,4 +1,6 @@
 import { useAuth } from "@/components/AuthContext";
+import Button from "@/components/Button";
+import Field from "@/components/Field";
 import { useAsync } from "@/hooks/useAsync";
 import { useForm } from "@/hooks/useForm";
 import { userService } from "@/services/user.service";
@@ -43,7 +45,7 @@ export default function MyProfile() {
       <Field {...register('phone')} placeholder="0949******" label="Số điện thoại" required />
       <Field {...register('username')} disabled />
       <Field {...register('fb')} placeholder="Facebook url" label="Facebook" required />
-      <Button loading={loading} onSubmit={onSubmit}>LƯU LẠI</Button>
+      <Button loading={loading} onClick={onSubmit}>LƯU LẠI</Button>
     </div>
   );
 }

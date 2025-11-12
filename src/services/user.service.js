@@ -13,4 +13,10 @@ export const userService = {
   updateInfo(data) {
     return api.patch(`${USER_API}`, data);
   },
+  sendEmailResetPassword(data) {
+    return api.post(`${USER_API}/reset-password`, data);
+  },
+  resetPasswordByCode(data) {
+    return api.post(`${USER_API}/change-password-by-code`, data);
+  },
 };
