@@ -20,7 +20,6 @@ export default function SignIn() {
     if (form.validate()) {
       try {
         const res = await loginService(form.values)
-        console.log(res)
         navigate(PATH.home);
       } catch (err) {
         console.error(err)

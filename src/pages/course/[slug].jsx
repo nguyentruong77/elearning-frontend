@@ -7,7 +7,7 @@ import CourseCard from "../../components/CourseCard";
 import Skeleton from "../../components/Skeleton";
 import Accordion from "../../components/Accordion";
 import moment from "moment";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Teacher from "@/components/Teacher";
 import { Modal } from "@/components/Modal";
 
@@ -18,6 +18,15 @@ export default function CourseDetail() {
   const { data, loading } = useFetch(() => courseService.getCourseDetail(id), [id])
   const { data: related } = useFetch(() => courseService.getRelative(id), [id])
   const detail = data?.data
+  const { pathCourse, startTime } = useMemo(() => {
+    if (detail) {
+      const pathCourse = generatePath(PATH.courseRegister, { id });
+      const startTime = moment(detail.opening_time).format('DD/MM/YYYY')
+      return {
+        pathCourse, startTime
+      }
+    }
+  }, [detail])
 
   if (loading) {
     return (
@@ -43,9 +52,6 @@ export default function CourseDetail() {
       </>
     )
   }
-
-  const pathCourse = generatePath(PATH.courseRegister, { id });
-  const startTime = moment(detail.opening_time).format('DD/MM/YYYY')
   return (
     <main className="course-detail" id="main">
       <section className="banner style2" style={{ "--background": "#cde6fb" }}>

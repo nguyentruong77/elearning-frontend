@@ -8,11 +8,15 @@ import { useState } from "react";
 import { Modal } from "../components/Modal";
 import Testimonial from "../components/Testimonial";
 import TeamGallery from "../components/TeamGallery";
+import { useQuery } from "@/hooks/useQuery";
 
 export default function Home() {
+  const { data: { data: courses = [] } = {}, loading } = useQuery({
+    queryFn: () => courseService.getCourse('?limit=6'),
+    queryKey: 'course'
+  })
   const [isOpenVideoModal, setIsOpenVideoModal] = useState(false)
-  const { data: courses, loading } = useFetch(() => courseService.getCourse('?limit=6'))
-  console.log(courses)
+  //const { data: courses, loading } = useFetch(() => courseService.getCourse('?limit=6'))
   useScrollTop()
   return (
     <main className="homepage" id="main">
@@ -53,7 +57,7 @@ export default function Home() {
               ? Array.from(Array(6)).map((_, i) => (
                 <CourseCardLoading key={i} />
               ))
-              : courses.data.map((e) => <CourseCard key={e.key} {...e} />)}
+              : courses.map((e) => <CourseCard key={e.key} {...e} />)}
           </div>
         </div>
       </section>

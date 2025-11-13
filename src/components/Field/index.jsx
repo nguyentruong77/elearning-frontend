@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 const ErrorS = styled.span`
@@ -10,7 +10,7 @@ const ErrorS = styled.span`
   font-style: italic;
 `;
 
-export default function Field({
+function Field({
   label,
   error,
   required,
@@ -29,3 +29,6 @@ export default function Field({
     </label>
   );
 }
+export default memo(Field, (oldProps, newProps) => {
+  return oldProps.error === newProps.error && oldProps.value === newProps.value
+})

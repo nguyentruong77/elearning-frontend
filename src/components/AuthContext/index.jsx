@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { authService } from "../../services/auth.service";
 import { message } from "antd";
 import { clearToken, clearUser, getUser, setToken, setUser } from "../../utils/token";
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         setUser(user || null)
     }, [user])
-    const login = async (data) => {
+    const login = useCallback(async (data) => {
         try {
             const res = await authService.login(data)
             if (res.data) {
@@ -28,8 +28,8 @@ export const AuthProvider = ({ children }) => {
             console.error(error)
             throw error;
         }
-    }
-    const getProfile = async () => {
+    }, [])
+    const getProfile = useCallback(async () => {
         const user = await userService.getProfile()
         _setUser(user.data)
         setUser(user.data)
@@ -40,13 +40,15 @@ export const AuthProvider = ({ children }) => {
         else {
             navigate(PATH.profile.index)
         }
-    }
-    const logout = () => {
+    }, [])
+    const logout = useCallback(() => {
         _setUser(null)
         clearToken()
         clearUser()
         message.success('Đăng xuất tài khoản thành công')
-    }
-
-    return <AuthContext.Provider value={{ user, login, logout, setUser: _setUser, getProfile }}>{children}</AuthContext.Provider>
+    }, [])
+    const value = useMemo(() => {
+        return { user, login, logout, setUser: _setUser, getProfile }
+    }, [user, login, logout, _setUser, getProfile])
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

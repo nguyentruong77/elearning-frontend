@@ -6,6 +6,7 @@ import { message } from "antd";
 import { useState } from "react";
 import Button from "../components/Button";
 import { useAsync } from "../hooks/useAsync";
+import { handleError } from "@/utils/handleError";
 
 export default function ContactPage() {
   const { validate, register, values, reset } = useForm({
@@ -31,11 +32,9 @@ export default function ContactPage() {
           );
           setIsSuccess(true);
         }
-      } else {
-        console.log("validate error");
       }
     } catch (err) {
-      console.log(err);
+      handleError(err)
     }
   };
 

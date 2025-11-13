@@ -4,9 +4,15 @@ import { useScrollTop } from "../../hooks/useScrollTop";
 import { courseService } from "../../services/course.service";
 import CourseCard, { CourseCardLoading } from "../../components/CourseCard";
 import { useFetch } from "../../hooks/useFetch";
+import { useQuery } from "@/hooks/useQuery";
 
 export default function Course() {
-  const { data: courses, loading } = useFetch(() => courseService.getCourse())
+  const { data: { data: courses = [] } = {}, loading } = useQuery({
+    queryFn: () => courseService.getCourse(),
+    queryKey: 'courses-list',
+    cacheTime: 10000
+  })
+  //const { data: courses, loading } = useFetch(() => courseService.getCourse())
   useScrollTop()
   return (
     <main className="homepage" id="main">
