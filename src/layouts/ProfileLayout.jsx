@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 import { PATH } from "../config/path";
-import { useAuth } from "../components/AuthContext";
+//import { useAuth } from "../components/AuthContext";
 import { avatarDefault } from "../config/index";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ProfileLayout() {
   const { user } = useAuth()

@@ -10,6 +10,7 @@ import { message } from "antd";
 import Input from "../components/Input";
 import { LoadingOutlined } from "@ant-design/icons";
 import classNames from "classnames";
+import { handleError } from "@/utils/handleError";
 
 const ErrorText = styled.p`
   color: red;
@@ -44,10 +45,7 @@ export default function SignUp() {
         await signupService(values)
         setIsSignupSuccess(true)
       } catch (err) {
-        console.error(err)
-        if (err?.response?.data?.message) {
-          message.error(err?.response?.data?.message)
-        }
+        handleError(err)
       }
     }
   }

@@ -3,7 +3,6 @@ import { courseService } from "../services/course.service";
 import CourseCard, { CourseCardLoading } from "../components/CourseCard";
 import { PATH } from "../config/path";
 import { Link } from "react-router-dom";
-import { useFetch } from "../hooks/useFetch";
 import { useState } from "react";
 import { Modal } from "../components/Modal";
 import Testimonial from "../components/Testimonial";

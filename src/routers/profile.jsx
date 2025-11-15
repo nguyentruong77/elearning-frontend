@@ -1,11 +1,13 @@
-import ProfileLayout from "../layouts/ProfileLayout";
+import { lazy } from "react";
 import { PATH } from "../config/path";
-import MyProfile from "../pages/profile/index";
-import MyCoin from "../pages/profile/coin";
-import MyCourse from "../pages/profile/course";
-import MyPayment from "../pages/profile/payment";
-import MyProject from "../pages/profile/project";
-import PrivateRouter from "../components/PrivateRouter";
+
+const ProfileLayout = lazy(() => import("../layouts/ProfileLayout"))
+const MyProfile = lazy(() => import("../pages/profile/index"))
+const MyCoin = lazy(() => import("../pages/profile/coin"))
+const MyCourse = lazy(() => import("../pages/profile/course"))
+const MyPayment = lazy(() => import("../pages/profile/payment"))
+const MyProject = lazy(() => import("../pages/profile/project"))
+const PrivateRouter = lazy(() => import("../components/PrivateRouter"))
 
 export const profile = (user) => {
   return {

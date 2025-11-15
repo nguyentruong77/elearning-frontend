@@ -8,12 +8,13 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { Select } from "@/components/Select";
 import { Checkbox } from "@/components/Checkbox";
-import { useAuth } from "@/components/AuthContext";
+//import { useAuth } from "@/components/AuthContext";
 import { PATH } from "@/config/path";
 import { message } from "antd";
 import { useAsync } from "@/hooks/useAsync";
 import { handleError } from "@/utils/handleError";
 import Button from "@/components/Button";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
   useScrollTop();

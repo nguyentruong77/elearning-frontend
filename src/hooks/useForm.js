@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { validate } from "../utils/validate";
 
 export const useForm = (rules, initialValue = {}) => {
@@ -20,7 +20,7 @@ export const useForm = (rules, initialValue = {}) => {
           );
           setError((prev) => ({ ...prev, [name]: error[name] }));
         }
-        setValues((prev) => ({ ...prev, _values }));
+        setValues((prev) => ({ ...prev, ..._values }));
       },
     };
   };

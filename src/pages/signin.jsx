@@ -1,34 +1,42 @@
 import { PATH } from "../config/path";
 import { useForm } from "../hooks/useForm";
 import { regexp, required } from "../utils/validate";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useAsync } from "../hooks/useAsync";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
+import { handleError } from "@/utils/handleError";
+import { loginThunkAction } from "@/stores/authReducer";
+import { useCallback } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function SignIn() {
-  const { login } = useAuth()
-  const { loading, excute: loginService } = useAsync(login)
+  const dispatch = useDispatch()
+  const { state } = useLocation()
   const navigate = useNavigate();
+
   const form = useForm({
     username: [required(), regexp('email')],
     password: [required()],
   });
+  const login = useCallback(async (data) => {
+    try {
+      const res = await dispatch(loginThunkAction(data)).unwrap()
+      const user = await unwrapResult(res)
+      console.log({ user })
+    } catch (error) {
+      handleError(error)
+    }
+  })
+  const { loading, excute: loginService } = useAsync(login)
+
   const _onLogin = async () => {
     if (form.validate()) {
-      try {
-        const res = await loginService(form.values)
-        navigate(PATH.home);
-      } catch (err) {
-        console.error(err)
-        if (err?.response?.data?.message) {
-          message.error(err?.response?.data?.message)
-        }
-      }
+      await loginService(form.values);
     }
-  };
+  }
 
   return (
     <main className="auth" id="main">

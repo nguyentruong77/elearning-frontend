@@ -1,12 +1,18 @@
 import React, { useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { PATH } from "../../config/path";
-import { useAuth } from "../AuthContext";
+//import { useAuth } from "../AuthContext";
 import { avatarDefault } from "../../config/index";
+import { useAuth } from "@/hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { LOGOUT_ACTION } from "@/stores/action";
+import { logoutAction } from "@/stores/authReducer";
+import { message } from "antd";
 
 export default function Header() {
   const { pathname } = useLocation();
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
+  const dispatch = useDispatch()
   useEffect(() => {
     onCloseMenu();
   }, [pathname]);
@@ -18,6 +24,14 @@ export default function Header() {
   const onCloseMenu = () => {
     document.body.classList.remove("menu-is-show");
   };
+
+  const logout = () => {
+    dispatch(logoutAction({
+      success: () => {
+        message.success('Đăng xuất thành công')
+      }
+    }))
+  }
 
   return (
     <>
