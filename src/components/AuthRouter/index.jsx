@@ -1,9 +1,8 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-//import { useAuth } from "../AuthContext";
 
 export default function AuthRouter({ redirect = "/" }) {
-  const { user } = useAuth()
+  const user = useSelector(state => state.auth.user);
   if (user) return <Navigate to={redirect} />;
   return <Outlet />;
 }

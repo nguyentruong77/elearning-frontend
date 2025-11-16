@@ -8,19 +8,18 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { Select } from "@/components/Select";
 import { Checkbox } from "@/components/Checkbox";
-//import { useAuth } from "@/components/AuthContext";
 import { PATH } from "@/config/path";
 import { message } from "antd";
 import { useAsync } from "@/hooks/useAsync";
 import { handleError } from "@/utils/handleError";
 import Button from "@/components/Button";
-import { useAuth } from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 
 export default function RegisterPage() {
   useScrollTop();
   const { id } = useParams();
   const pathName = useLocation()
-  const { user } = useAuth()
+  const user = useSelector(state => state.auth.user);
   const navigate = useNavigate()
   useEffect(() => {
     if (!user) {

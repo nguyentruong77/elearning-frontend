@@ -5,7 +5,6 @@ import {
   setToken,
   setUser,
 } from "@/utils/token";
-import { LOGOUT_ACTION, SET_USER_ACTION } from "./action";
 import { userService } from "@/services/user.service";
 import { authService } from "@/services/auth.service";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -15,31 +14,19 @@ const initialState = {
   state: "idle",
 };
 
-export const setUserAction = (data) => ({
-  type: SET_USER_ACTION,
-  payload: data,
-});
-
-export const logoutAction = (data) => {
-  return (dispatch) => {
-    clearUser();
-    clearToken();
-    dispatch({ type: LOGOUT_ACTION });
-    data?.success();
-  };
-};
-
-export const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case LOGOUT_ACTION:
-      return { user: null };
-    case SET_USER_ACTION:
-      return { user: action.payload };
-
-    default:
-      return state;
+export const logoutThunkAction = createAsyncThunk(
+  "auth/logout",
+  async (_, thunkApi) => {
+    try {
+      clearToken();
+      clearUser();
+      thunkApi.fulfillWithValue();
+    } catch (error) {
+      thunkApi.rejectWithValue(error?.response?.data);
+      throw error?.response?.data;
+    }
   }
-};
+);
 
 export const loginThunkAction = createAsyncThunk(
   "auth/login",
@@ -63,14 +50,6 @@ export const loginThunkAction = createAsyncThunk(
 export const { reducer: authSliceReducer, actions: authActions } = createSlice({
   initialState,
   name: "auth",
-  reducers: {
-    logout: (state) => {
-      state.user = null;
-    },
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
-  },
   extraReducers: (builder) => {
     builder.addCase(loginThunkAction.pending, (state) => {
       state.status = "pending";
@@ -81,6 +60,9 @@ export const { reducer: authSliceReducer, actions: authActions } = createSlice({
     });
     builder.addCase(loginThunkAction.rejected, (state) => {
       state.status = "error";
+    });
+    builder.addCase(logoutThunkAction.fulfilled, (state) => {
+      state.user = null;
     });
   },
 });

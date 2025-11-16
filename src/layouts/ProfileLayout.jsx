@@ -1,12 +1,11 @@
 import React from "react";
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 import { PATH } from "../config/path";
-//import { useAuth } from "../components/AuthContext";
 import { avatarDefault } from "../config/index";
-import { useAuth } from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 
 export default function ProfileLayout() {
-  const { user } = useAuth()
+  const user = useSelector(state => state.auth.user);
   if (!user) return <Navigate to={PATH.signin} />;
   return (
     <main className="profile" id="main">

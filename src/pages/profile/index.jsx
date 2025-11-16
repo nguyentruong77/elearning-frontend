@@ -1,18 +1,16 @@
-//import { useAuth } from "@/components/AuthContext";
 import Button from "@/components/Button";
 import Field from "@/components/Field";
 import { useAsync } from "@/hooks/useAsync";
-import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks/useForm";
 import { userService } from "@/services/user.service";
 import { handleError } from "@/utils/handleError";
 import { regexp, required, validate } from "@/utils/validate";
 import { message } from "antd";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MyProfile() {
-  const { user } = useAuth()
+  const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch()
   const { loading, excute: updateInfoService } = useAsync(userService.updateInfo)
   const { register, values } = useForm({

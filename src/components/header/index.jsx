@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../config/path";
-//import { useAuth } from "../AuthContext";
 import { avatarDefault } from "../../config/index";
-import { useAuth } from "@/hooks/useAuth";
 import { useDispatch } from "react-redux";
-import { LOGOUT_ACTION } from "@/stores/action";
-import { logoutAction } from "@/stores/authReducer";
+import { logoutThunkAction } from "@/stores/authReducer";
 import { message } from "antd";
+import { useSelector } from "react-redux";
+import { handleError } from "@/utils/handleError";
 
 export default function Header() {
   const { pathname } = useLocation();
-  const { user } = useAuth()
+  const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   useEffect(() => {
     onCloseMenu();
   }, [pathname]);
@@ -25,14 +25,15 @@ export default function Header() {
     document.body.classList.remove("menu-is-show");
   };
 
-  const logout = () => {
-    dispatch(logoutAction({
-      success: () => {
-        message.success('Đăng xuất thành công')
-      }
-    }))
+  const logout = async () => {
+    try {
+      await dispatch(logoutThunkAction()).unwrap()
+      message.success('Đăng xuất thành công')
+      navigate(PATH.home)
+    } catch (error) {
+      handleError(error)
+    }
   }
-
   return (
     <>
       <header id="header">
@@ -53,12 +54,12 @@ export default function Header() {
             {user ? (
               <div className="have-login">
                 <div className="account">
-                  <a href="./profile.html" className="info">
+                  <Link to={PATH.profile.index} className="info">
                     <div className="name">{user.name}</div>
                     <div className="avatar">
                       <img src={user.avatar ?? avatarDefault} alt="" />
                     </div>
-                  </a>
+                  </Link>
                 </div>
                 <div className="hamberger"></div>
                 <div className="sub">
@@ -85,17 +86,16 @@ export default function Header() {
       </header>
       <nav className="nav">
         <ul>
-          <li>
-            <Link href={PATH.signin}>Đăng ký / Đăng nhập</Link>
-          </li>
-          <li>
-            <a href={PATH.profile.index} className="account">
-              <div className="avatar">
-                <img src={avatarDefault} alt="" />
-              </div>
-              <div className="name">Nguyen Ich Truong</div>
-            </a>
-          </li>
+          {user && (
+            <li>
+              <a href={PATH.profile.index} className="account">
+                <div className="avatar">
+                  <img src={avatarDefault} alt="" />
+                </div>
+                <div className="name">{user.name}</div>
+              </a>
+            </li>
+          )}
           <li>
             <NavLink to={PATH.home}>Trang chủ</NavLink>
           </li>

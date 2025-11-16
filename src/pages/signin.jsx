@@ -10,7 +10,6 @@ import { useDispatch } from "react-redux";
 import { handleError } from "@/utils/handleError";
 import { loginThunkAction } from "@/stores/authReducer";
 import { useCallback } from "react";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function SignIn() {
   const dispatch = useDispatch()
@@ -23,9 +22,14 @@ export default function SignIn() {
   });
   const login = useCallback(async (data) => {
     try {
-      const res = await dispatch(loginThunkAction(data)).unwrap()
-      const user = await unwrapResult(res)
-      console.log({ user })
+      await dispatch(loginThunkAction(data)).unwrap()
+      message.success('Đăng nhập thành công')
+      if (state?.redirect) {
+        navigate(state.redirect)
+      }
+      else {
+        navigate(PATH.home)
+      }
     } catch (error) {
       handleError(error)
     }
