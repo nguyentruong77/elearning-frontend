@@ -108,20 +108,7 @@ export default function ContactPage() {
 
               </>
           }
-
-          {/* <div class="main-sub-title">liên hệ</div> */}
         </section>
-        {/* <div class="register-success">
-                <div class="contain">
-                    <div class="main-title">đăng ký thành công</div>
-                    <p>
-                        <strong>Chào mừng Truong Nguyen đã trở thành thành viên mới của Spacedev Team.</strong> <br>
-                        Cảm ơn bạn đã đăng ký khóa học tại <strong>Spacedev</strong>, chúng tôi sẽ chủ động liên lạc với bạn thông qua facebook
-                        hoặc số điện thoại của bạn.
-                    </p>
-                </div>
-                <a href="/" class="btn main rect">về trang chủ</a>
-            </div> */}
       </main>
     </>
   );

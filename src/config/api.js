@@ -14,20 +14,17 @@ api.interceptors.response.use(
     return res.data ?? res;
   },
   async (error) => {
-    try {
-      if (
-        error.response.status === 403 &&
-        error.response.data.status_code === "TOKEN_EXPIRED"
-      ) {
-        const token = getToken();
-        const res = await authService.refreshToken({
-          refreshToken: token.refreshToken,
-        });
-        setToken(res.data);
-        return api(error.config);
-      }
-    } catch (error) {}
-    throw error;
+    if (
+      error.response.status === 403 &&
+      error.response.data.status_code === "TOKEN_EXPIRED"
+    ) {
+      const token = getToken();
+      const res = await authService.refreshToken({
+        refreshToken: token.refreshToken,
+      });
+      setToken(res.data);
+      return api(error.config);
+    }
   }
 );
 
